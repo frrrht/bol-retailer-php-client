@@ -1,19 +1,19 @@
 <?php
 
 
-namespace Picqer\BolRetailerV6\Tests;
+namespace Picqer\BolRetailerV7\Tests;
 
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 use GuzzleHttp\Psr7\Message;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
-use Picqer\BolRetailerV6\BaseClient;
-use Picqer\BolRetailerV6\Exception\RateLimitException;
-use Picqer\BolRetailerV6\Exception\ResponseException;
-use Picqer\BolRetailerV6\Exception\ServerException;
-use Picqer\BolRetailerV6\Exception\UnauthorizedException;
-use Picqer\BolRetailerV6\Model\AbstractModel;
+use Picqer\BolRetailerV7\BaseClient;
+use Picqer\BolRetailerV7\Exception\RateLimitException;
+use Picqer\BolRetailerV7\Exception\ResponseException;
+use Picqer\BolRetailerV7\Exception\ServerException;
+use Picqer\BolRetailerV7\Exception\UnauthorizedException;
+use Picqer\BolRetailerV7\Model\AbstractModel;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -305,14 +305,14 @@ class BaseClientTest extends TestCase
             ->shouldBeCalled();
 
         $this->client->request('GET', 'foobar', [
-            'produces' => 'application/vnd.retailer.v5+pdf'
+            'produces' => 'application/vnd.retailer.v7+pdf'
         ], [
             '200' => 'string'
         ]);
 
         $this->assertArrayHasKey('headers', $actualArgs);
         $this->assertArrayHasKey('Accept', $actualArgs['headers']);
-        $this->assertEquals('application/vnd.retailer.v5+pdf', $actualArgs['headers']['Accept']);
+        $this->assertEquals('application/vnd.retailer.v7+pdf', $actualArgs['headers']['Accept']);
     }
 
     public function testRequestJsonEncodesBodyModelIntoBody()

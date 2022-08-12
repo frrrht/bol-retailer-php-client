@@ -29,20 +29,20 @@
     },
     "autoload": {
         "psr-4": {
-            "Picqer\\BolRetailerV6\\": "src"
+            "Picqer\\BolRetailerV7\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Picqer\\BolRetailerV6\\Tests\\": "tests"
+            "Picqer\\BolRetailerV7\\Tests\\": "tests"
         }
     },
     "scripts": {
         "test": "phpunit",
         "check-style": "phpcs src tests",
         "fix-style": "phpcbf src tests",
-        "generate-client": "Picqer\\BolRetailerV6\\OpenApi\\ClientGenerator::run",
-        "generate-models": "Picqer\\BolRetailerV6\\OpenApi\\ModelGenerator::run"
+        "generate-client": "Picqer\\BolRetailerV7\\OpenApi\\ClientGenerator::run",
+        "generate-models": "Picqer\\BolRetailerV7\\OpenApi\\ModelGenerator::run"
     },
     "extra": {
         "branch-alias": {
