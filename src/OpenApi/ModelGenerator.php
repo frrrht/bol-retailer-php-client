@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Picqer\BolRetailerV6\OpenApi;
+namespace Picqer\BolRetailerV7\OpenApi;
 
 class ModelGenerator
 {

@@ -3,9 +3,9 @@
     "host": "api.bol.com",
     "schemes": ["https"],
     "info" : {
-        "description" : "The bol.com API for Retailers.",
-        "version" : "6.0",
-        "title" : "v6"
+        "description" : "The bol.com API for retailers.",
+        "version" : "7.x",
+        "title" : "v7 - Retailer API"
     },
     "tags" : [ {
         "name" : "Commissions"
@@ -20,9 +20,9 @@
     }, {
         "name" : "Orders"
     }, {
-        "name" : "Process Status"
-    }, {
         "name" : "Product Content"
+    }, {
+        "name" : "Promotions"
     }, {
         "name" : "Replenishments"
     }, {
@@ -43,8 +43,8 @@
                 "summary" : "Get all commissions and reductions by EAN in bulk",
                 "description" : "Gets all commissions and possible reductions by EAN, price, and optionally condition.",
                 "operationId" : "get-commissions",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -81,7 +81,7 @@
                 "summary" : "Get all commissions and reductions by EAN per single EAN",
                 "description" : "Commissions can be filtered by condition, which defaults to NEW. We will calculate the commission amount from the EAN and price.",
                 "operationId" : "get-commission",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "ean",
                     "in" : "path",
@@ -127,20 +127,20 @@
                 }
             }
         },
-        "/retailer/content/product" : {
+        "/retailer/content/products" : {
             "post" : {
                 "tags" : [ "Product Content" ],
-                "summary" : "Post product content",
-                "description" : "Create content for existing products or new products.",
+                "summary" : "Create content for a product",
+                "description" : "Create content for an existing product.",
                 "operationId" : "post-product-content",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
                     "required" : false,
                     "schema" : {
-                        "$ref" : "#/definitions/CreateProductContentRequest"
+                        "$ref" : "#/definitions/CreateProductContentSingleRequest"
                     }
                 } ],
                 "responses" : {
@@ -159,17 +159,17 @@
                 }
             }
         },
-        "/retailer/content/validation-report/{uploadId}" : {
+        "/retailer/content/upload-report/{upload-id}" : {
             "get" : {
                 "tags" : [ "Product Content" ],
-                "summary" : "Get validation report",
-                "description" : "Retrieve a validation report of the product content upload based on the upload id.",
-                "operationId" : "get-validation-report",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "summary" : "Get an upload report by upload id",
+                "description" : "Gets the upload report of the product content submitted by upload id.",
+                "operationId" : "get-upload-report",
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
-                    "name" : "uploadId",
+                    "name" : "upload-id",
                     "in" : "path",
-                    "description" : "The identifier of the product content upload.",
+                    "description" : "The identifier of the upload report.",
                     "required" : true,
                     "type" : "string"
                 } ],
@@ -177,7 +177,7 @@
                     "200" : {
                         "description" : "Ok: Successfully processed the request.",
                         "schema" : {
-                            "$ref" : "#/definitions/ValidationReportResponse"
+                            "$ref" : "#/definitions/UploadReportResponse"
                         }
                     },
                     "404" : {
@@ -195,7 +195,7 @@
                 "summary" : "Get offer insights",
                 "description" : "Get the product visits and the buy box percentage for an offer during a given period.",
                 "operationId" : "get-offer-insights",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "query",
@@ -250,7 +250,7 @@
                 "summary" : "Get performance indicators",
                 "description" : "Gets the measurements for your performance indicators per week.",
                 "operationId" : "get-performance-indicators",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "name",
                     "in" : "query",
@@ -297,7 +297,7 @@
                 "summary" : "Get sales forecast",
                 "description" : "Get sales forecast to estimate the sales expectations on the total bol.com platform for the requested number of weeks ahead.",
                 "operationId" : "get-sales-forecast",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "query",
@@ -334,7 +334,7 @@
                 "summary" : "Get search terms",
                 "description" : "Retrieves the search volume for a specified search term and period. The search volume allows you to see what bol.com customers are searching for. Based on the search volume per search term you can optimize your product content, or spot opportunities to extend your assortment, or analyzing trends for inventory management.",
                 "operationId" : "get-search-terms",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "search-term",
                     "in" : "query",
@@ -385,7 +385,7 @@
                 "summary" : "Get LVB/FBB inventory",
                 "description" : "The inventory endpoint is a specific LVB/FBB endpoint. It provides a paginated list containing your fulfilment by bol.com inventory. This endpoint does not provide information about your own stock.",
                 "operationId" : "get-inventory",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "page",
                     "in" : "query",
@@ -453,7 +453,7 @@
                 "summary" : "Get all invoices",
                 "description" : "Gets a list of invoices, by default from the past 4 weeks. The optional period-start-date and period-end-date-date parameters can be used together to retrieve invoices from a specific date range in the past, the period can be no longer than 31 days. Invoices and their specifications can be downloaded separately in different media formats with the ‘GET an invoice by id’ and the ‘GET an invoice specification by id’ calls. The available media types differ per invoice and are listed per invoice within the response. Note: the media types listed in the response must be given in our standard API format.",
                 "operationId" : "get-invoices",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "period-start-date",
                     "in" : "query",
@@ -495,7 +495,7 @@
                 "summary" : "Get an invoice by invoice id",
                 "description" : "Gets an invoice by invoice id. The available media types differ per invoice and are listed within the response from the ‘GET all invoices’ call. Note: the media types listed in the response must be given in our standard API format.",
                 "operationId" : "get-invoice",
-                "produces" : [ "application/vnd.retailer.v6+json", "application/vnd.retailer.v6+pdf" ],
+                "produces" : [ "application/vnd.retailer.v7+json", "application/vnd.retailer.v7+pdf" ],
                 "parameters" : [ {
                     "name" : "invoice-id",
                     "in" : "path",
@@ -529,7 +529,7 @@
                 "summary" : "Get an invoice specification by invoice id",
                 "description" : "Gets an invoice specification for an invoice with a paginated list of its transactions. The available media types differ per invoice specification and are listed within the response from the ‘GET all invoices’ call. Note, the media types listed in the response must be given in our standard API format.",
                 "operationId" : "get-invoice-specification",
-                "produces" : [ "application/vnd.retailer.v6+json", "application/vnd.retailer.v6+pdf", "application/vnd.retailer.v6+openxmlformats-officedocument.spreadsheetml.sheet" ],
+                "produces" : [ "application/vnd.retailer.v7+json", "application/vnd.retailer.v7+pdf", "application/vnd.retailer.v7+openxmlformats-officedocument.spreadsheetml.sheet" ],
                 "parameters" : [ {
                     "name" : "invoice-id",
                     "in" : "path",
@@ -571,8 +571,8 @@
                 "summary" : "Create a new offer",
                 "description" : "Creates a new offer, and adds it to the catalog. After creation, status information can be retrieved to review if the offer is valid and published to the shop.",
                 "operationId" : "post-offer",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -603,8 +603,8 @@
                 "summary" : "Request an offer export file",
                 "description" : "Request an offer export file containing all offers.",
                 "operationId" : "post-offer-export",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -635,7 +635,7 @@
                 "summary" : "Retrieve an offer export file by offer export id",
                 "description" : "Retrieve an offer export file containing all offers.",
                 "operationId" : "get-offer-export",
-                "produces" : [ "application/vnd.retailer.v6+csv" ],
+                "produces" : [ "application/vnd.retailer.v7+csv" ],
                 "parameters" : [ {
                     "name" : "report-id",
                     "in" : "path",
@@ -668,7 +668,7 @@
                 "summary" : "Retrieve an offer by its offer id",
                 "description" : "Retrieve an offer by using the offer id provided to you when creating or listing your offers.",
                 "operationId" : "get-offer",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "path",
@@ -696,8 +696,8 @@
                 "summary" : "Update an offer",
                 "description" : "Use this endpoint to send an offer update. This endpoint returns a process status.",
                 "operationId" : "put-offer",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "path",
@@ -732,7 +732,7 @@
                 "summary" : "Delete offer by id",
                 "description" : "Delete an offer by id.",
                 "operationId" : "delete-offer",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "path",
@@ -762,8 +762,8 @@
                 "summary" : "Update price(s) for offer by id",
                 "description" : "Update price(s) for offer by id.",
                 "operationId" : "update-offer-price",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "path",
@@ -800,8 +800,8 @@
                 "summary" : "Update stock for offer by id",
                 "description" : "Update stock for offer by id.",
                 "operationId" : "update-offer-stock",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "offer-id",
                     "in" : "path",
@@ -835,10 +835,10 @@
         "/retailer/orders" : {
             "get" : {
                 "tags" : [ "Orders" ],
-                "summary" : "Get orders",
-                "description" : "Gets a paginated list of all orders sorted by date in descending order. To create a pick list you can set state to open.",
+                "summary" : "Get a list of orders",
+                "description" : "Gets a paginated list of all orders for a retailer.",
                 "operationId" : "get-orders",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "page",
                     "in" : "query",
@@ -881,8 +881,8 @@
                 "summary" : "Cancel an order item by an order item id",
                 "description" : "This endpoint can be used to either confirm a cancellation request by the customer or to cancel an order item you yourself are unable to fulfil.",
                 "operationId" : "cancel-order-item",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -913,8 +913,8 @@
                 "summary" : "Ship order item",
                 "description" : "Ship a single order item within a customer order by providing shipping information. If you purchased a shipping label you should add the shippingLabelId to this message and leave the transport element empty. If you will ship the item using your own transporter method you must omit the shippingLabelId entirely and fill in the transport element with the fields from GET shipping labels.",
                 "operationId" : "ship-order-item",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -942,10 +942,10 @@
         "/retailer/orders/{order-id}" : {
             "get" : {
                 "tags" : [ "Orders" ],
-                "summary" : "Get order",
+                "summary" : "Get an order by order id",
                 "description" : "Gets an order by order id. The order can be partially shipped or cancelled, and the message contains the quantity shipped or cancelled items. The unitPrice takes account of volume discounts.",
                 "operationId" : "get-order",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "order-id",
                     "in" : "path",
@@ -969,28 +969,24 @@
                 }
             }
         },
-        "/retailer/process-status" : {
+        "/retailer/promotions" : {
             "get" : {
-                "tags" : [ "Process Status" ],
-                "summary" : "Get the status of an asynchronous process by entity id and event type for a retailer",
-                "description" : "Retrieve a list of process statuses, which shows information regarding previously executed PUT/POST/DELETE requests in descending order. You need to supply an entity id and event type.Please note: process status instances are only retained for a limited period of time after completion. Outside of this period, deleted process statuses will no longer be returned. Please handle this accordingly, by stopping any active polling for these statuses.",
-                "operationId" : "get-process-status-entity-id",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "tags" : [ "Promotions" ],
+                "summary" : "Get a list of promotions",
+                "description" : "Gets a paginated list of all promotions for a retailer.",
+                "operationId" : "get-promotions",
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
-                    "name" : "entity-id",
+                    "name" : "promotion-type",
                     "in" : "query",
-                    "description" : "The entity id is not unique so you need to provide an event type. The entity id can either be order item id, transport id, return number or inbound reference.",
+                    "description" : "The type(s) of promotion to be retrieved.",
                     "required" : true,
-                    "type" : "string",
-                    "x-example" : "987654321"
-                }, {
-                    "name" : "event-type",
-                    "in" : "query",
-                    "description" : "The event type can only be used in combination with the entity id.",
-                    "required" : true,
-                    "type" : "string",
-                    "x-example" : "CONFIRM_SHIPMENT",
-                    "enum" : [ "CONFIRM_SHIPMENT", "CANCEL_ORDER", "CHANGE_TRANSPORT", "HANDLE_RETURN_ITEM", "CREATE_RETURN_ITEM", "CREATE_INBOUND", "DELETE_OFFER", "CREATE_OFFER", "UPDATE_OFFER", "UPDATE_OFFER_STOCK", "UPDATE_OFFER_PRICE", "CREATE_OFFER_EXPORT", "UNPUBLISHED_OFFER_REPORT", "CREATE_PRODUCT_CONTENT", "CREATE_SUBSCRIPTION", "UPDATE_SUBSCRIPTION", "DELETE_SUBSCRIPTION", "SEND_SUBSCRIPTION_TST_MSG", "CREATE_SHIPPING_LABEL", "CREATE_REPLENISHMENT", "UPDATE_REPLENISHMENT", "CREATE_CAMPAIGN", "UPDATE_CAMPAIGN", "CREATE_AD_GROUP", "CREATE_NEGATIVE_KEYWORD", "CREATE_TARGET_PRODUCT", "DELETE_NEGATIVE_KEYWORD", "UPDATE_AD_GROUP", "UPDATE_TARGET_PRODUCT", "CREATE_KEYWORD", "UPDATE_KEYWORD", "DELETE_KEYWORD" ]
+                    "type" : "array",
+                    "items" : {
+                        "type" : "string",
+                        "enum" : [ "AWARENESS", "PRICE_OFF" ]
+                    },
+                    "collectionFormat" : "multi"
                 }, {
                     "name" : "page",
                     "in" : "query",
@@ -999,43 +995,14 @@
                     "type" : "integer",
                     "default" : 1,
                     "minimum" : 1,
-                    "format" : "int32"
+                    "format" : "int32",
+                    "x-example" : 1
                 } ],
                 "responses" : {
                     "200" : {
                         "description" : "Ok: Successfully processed the request.",
                         "schema" : {
-                            "$ref" : "#/definitions/ProcessStatusResponse"
-                        }
-                    },
-                    "400" : {
-                        "description" : "Bad request: The sent request does not meet the API specification. Please check the error message(s) for more information.",
-                        "schema" : {
-                            "$ref" : "#/definitions/Problem"
-                        }
-                    }
-                }
-            },
-            "post" : {
-                "tags" : [ "Process Status" ],
-                "summary" : "Get the status of multiple asynchronous processes by an array of process status ids for a retailer",
-                "description" : "Retrieve a list of process statuses, which shows information regarding previously executed PUT/POST/DELETE requests. No more than 1000 process status id's can be sent in a single request.Please note: process status instances are only retained for a limited period of time after completion. Outside of this period, deleted process statuses will no longer be returned. Please handle this accordingly, by stopping any active polling for these statuses.",
-                "operationId" : "get-process-status-bulk",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
-                "parameters" : [ {
-                    "in" : "body",
-                    "name" : "body",
-                    "required" : false,
-                    "schema" : {
-                        "$ref" : "#/definitions/BulkProcessStatusRequest"
-                    }
-                } ],
-                "responses" : {
-                    "200" : {
-                        "description" : "Ok: Successfully processed the request.",
-                        "schema" : {
-                            "$ref" : "#/definitions/ProcessStatusResponse"
+                            "$ref" : "#/definitions/Promotions"
                         }
                     },
                     "400" : {
@@ -1047,17 +1014,17 @@
                 }
             }
         },
-        "/retailer/process-status/{process-status-id}" : {
+        "/retailer/promotions/{promotion-id}" : {
             "get" : {
-                "tags" : [ "Process Status" ],
-                "summary" : "Get the status of an asynchronous process by process status id",
-                "description" : "Retrieve a specific process-status, which shows information regarding a previously executed PUT/POST/DELETE request. All PUT/POST/DELETE requests on the other endpoints will supply a process-status-id in the related response. You can use this id to retrieve a status by using the endpoint below. Please note: process status instances are only retained for a limited period of time after completion. Outside of this period, a 404 will be returned for missing process statuses. Please handle this accordingly, by stopping any active polling for these statuses.",
-                "operationId" : "get-process-status",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "tags" : [ "Promotions" ],
+                "summary" : "Get a promotion by promotion id",
+                "description" : "Gets the details of a promotion.",
+                "operationId" : "get-promotion",
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
-                    "name" : "process-status-id",
+                    "name" : "promotion-id",
                     "in" : "path",
-                    "description" : "The id of the process status being requested. This id is supplied in every response to a PUT/POST/DELETE request on the other endpoints.",
+                    "description" : "The identifier of the promotion.",
                     "required" : true,
                     "type" : "string"
                 } ],
@@ -1065,11 +1032,57 @@
                     "200" : {
                         "description" : "Ok: Successfully processed the request.",
                         "schema" : {
-                            "$ref" : "#/definitions/ProcessStatus"
+                            "$ref" : "#/definitions/Promotion"
                         }
                     },
                     "404" : {
                         "description" : "Not found: The requested item could not be found.",
+                        "schema" : {
+                            "$ref" : "#/definitions/Problem"
+                        }
+                    },
+                    "400" : {
+                        "description" : "Bad request: The sent request does not meet the API specification. Please check the error message(s) for more information.",
+                        "schema" : {
+                            "$ref" : "#/definitions/Problem"
+                        }
+                    }
+                }
+            }
+        },
+        "/retailer/promotions/{promotion-id}/products" : {
+            "get" : {
+                "tags" : [ "Promotions" ],
+                "summary" : "Get a list of products",
+                "description" : "Gets a paginated list of all products that are present within a promotion.",
+                "operationId" : "get-products",
+                "produces" : [ "application/vnd.retailer.v7+json" ],
+                "parameters" : [ {
+                    "name" : "promotion-id",
+                    "in" : "path",
+                    "description" : "The identifier of the promotion.",
+                    "required" : true,
+                    "type" : "string"
+                }, {
+                    "name" : "page",
+                    "in" : "query",
+                    "description" : "The requested page number with a page size of 50 items.",
+                    "required" : false,
+                    "type" : "integer",
+                    "default" : 1,
+                    "minimum" : 1,
+                    "format" : "int32",
+                    "x-example" : 1
+                } ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Ok: Successfully processed the request.",
+                        "schema" : {
+                            "$ref" : "#/definitions/Products"
+                        }
+                    },
+                    "400" : {
+                        "description" : "Bad request: The sent request does not meet the API specification. Please check the error message(s) for more information.",
                         "schema" : {
                             "$ref" : "#/definitions/Problem"
                         }
@@ -1083,7 +1096,7 @@
                 "summary" : "Get replenishments",
                 "description" : "Gets a list of replenishments.",
                 "operationId" : "get-replenishments",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "reference",
                     "in" : "query",
@@ -1151,11 +1164,11 @@
             },
             "post" : {
                 "tags" : [ "Replenishments" ],
-                "summary" : "Post replenishment",
-                "description" : "Create a replenishment.",
+                "summary" : "Create a replenishment",
+                "description" : "Creates a replenishment.",
                 "operationId" : "post-replenishment",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1186,7 +1199,7 @@
                 "summary" : "Get delivery dates",
                 "description" : "Retrieve a list of available delivery dates for a replenishment.",
                 "operationId" : "get-delivery-dates",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "responses" : {
                     "200" : {
                         "description" : "Ok: Successfully processed the request.",
@@ -1209,8 +1222,8 @@
                 "summary" : "Post pickup time slots",
                 "description" : "Retrieve pickup time slots.",
                 "operationId" : "post-pickup-time-slots",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1241,8 +1254,8 @@
                 "summary" : "Post product labels",
                 "description" : "Retrieve product labels.",
                 "operationId" : "post-product-labels",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+pdf" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+pdf" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1283,7 +1296,7 @@
                 "summary" : "Get a replenishment by replenishment id",
                 "description" : "Gets a replenishment by replenishment id.",
                 "operationId" : "get-replenishment",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "replenishment-id",
                     "in" : "path",
@@ -1315,11 +1328,11 @@
             },
             "put" : {
                 "tags" : [ "Replenishments" ],
-                "summary" : "Update replenishment ",
-                "description" : "Update a replenishment.",
+                "summary" : "Update a replenishment by replenishment id",
+                "description" : "Updates a replenishment.",
                 "operationId" : "put-replenishment",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "replenishment-id",
                     "in" : "path",
@@ -1357,7 +1370,7 @@
                 "summary" : "Get load carrier labels",
                 "description" : "Retrieve the load carrier labels.",
                 "operationId" : "get-load-carrier-labels",
-                "produces" : [ "application/vnd.retailer.v6+pdf" ],
+                "produces" : [ "application/vnd.retailer.v7+pdf" ],
                 "parameters" : [ {
                     "name" : "replenishment-id",
                     "in" : "path",
@@ -1407,7 +1420,7 @@
                 "summary" : "Get pick list",
                 "description" : "Retrieve the pick list.",
                 "operationId" : "get-pick-list",
-                "produces" : [ "application/vnd.retailer.v6+pdf" ],
+                "produces" : [ "application/vnd.retailer.v7+pdf" ],
                 "parameters" : [ {
                     "name" : "replenishment-id",
                     "in" : "path",
@@ -1448,7 +1461,7 @@
                 "summary" : "Get returns",
                 "description" : "Get a paginated list of multi-item returns. Handled returns are sorted by date in descending order, while unhandled returns are sorted by date in ascending order.",
                 "operationId" : "get-returns",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "page",
                     "in" : "query",
@@ -1490,10 +1503,10 @@
             },
             "post" : {
                 "tags" : [ "Returns" ],
-                "summary" : "Create return",
+                "summary" : "Create a return",
                 "description" : "Create a return, and automatically handle it with the provided handling result. When successfully created, the resulting return id is provided in the process status.",
                 "operationId" : "create-return",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1524,7 +1537,7 @@
                 "summary" : "Get a return by return id",
                 "description" : "Retrieve a return based on the return id.",
                 "operationId" : "get-return",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "return-id",
                     "in" : "path",
@@ -1551,15 +1564,15 @@
         "/retailer/returns/{rma-id}" : {
             "put" : {
                 "tags" : [ "Returns" ],
-                "summary" : "Handle a return",
-                "description" : "Allows the user to handle a return. This can be to either handle an open return, or change the handlingResult of an already handled return. The latter is only possible in limited scenarios, please check the returns documentation for a complete list.",
+                "summary" : "Handle a return by rma id",
+                "description" : "Allows the user to handle a return. This can be to either handle an open return, or change the handlingResult of an already handled return. Please refer to the Returns documentation for further details.",
                 "operationId" : "handle-return",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "rma-id",
                     "in" : "path",
-                    "description" : "The RMA (Return Merchandise Authorization) id that identifies this particular return.",
+                    "description" : "The RMA (Return Merchandise Authorization) identifier of the return.",
                     "required" : true,
                     "type" : "integer",
                     "format" : "int64"
@@ -1594,7 +1607,7 @@
                 "summary" : "Get shipment list",
                 "description" : "A paginated list to retrieve all your shipments up to 3 months old. The shipments will be sorted by date in descending order.",
                 "operationId" : "get-shipments",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "page",
                     "in" : "query",
@@ -1640,7 +1653,7 @@
                 "summary" : "Get a shipment by shipment id",
                 "description" : "Retrieve a single shipment by its corresponding id.",
                 "operationId" : "get-shipment",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "shipment-id",
                     "in" : "path",
@@ -1670,8 +1683,8 @@
                 "summary" : "Create a shipping label",
                 "description" : "Create a shipping label with a shipping label offer id retrieved from get delivery options.",
                 "operationId" : "post-shipping-label",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1702,8 +1715,8 @@
                 "summary" : "Get delivery options for a shippable configuration of a number of order items within an order",
                 "description" : "Retrieves all available delivery options based on the supplied configuration of order items that has to be shipped.",
                 "operationId" : "get-delivery-options",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1740,7 +1753,7 @@
                 "summary" : "Get a shipping label",
                 "description" : "Retrieves a shipping label by shipping label id. Metadata for the shipping label is added as headers in the response. If you are only interested in the metadata, you can do a HEAD request to retrieve only the headers without the label data.",
                 "operationId" : "get-shipping-label",
-                "produces" : [ "application/vnd.retailer.v6+pdf" ],
+                "produces" : [ "application/vnd.retailer.v7+pdf" ],
                 "parameters" : [ {
                     "name" : "shipping-label-id",
                     "in" : "path",
@@ -1791,7 +1804,7 @@
                 "summary" : "Get push notification subscriptions",
                 "description" : "Retrieve a list of all configured and active push notification subscriptions.",
                 "operationId" : "get-push-notification-subscriptions",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "responses" : {
                     "200" : {
                         "description" : "Ok: Successfully processed the request.",
@@ -1812,8 +1825,8 @@
                 "summary" : "Create push notification subscription",
                 "description" : "Create a push notification subscription for one (or more) of the available resources. The configured URL has to support https scheme.",
                 "operationId" : "post-push-notification-subscription",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "in" : "body",
                     "name" : "body",
@@ -1844,7 +1857,7 @@
                 "summary" : "Retrieve public keys for push notification signature validation.",
                 "description" : "Retrieve a list of public keys that should be used to validate the signature header for push notifications received from bol.com.",
                 "operationId" : "get-subscription-keys",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "responses" : {
                     "200" : {
                         "description" : "Ok: Successfully processed the request.",
@@ -1861,8 +1874,8 @@
                 "summary" : "Send test push notification for subscriptions",
                 "description" : "Send a test push notification to all subscriptions for the provided event.",
                 "operationId" : "post-test-push-notification",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "subscription-id",
                     "in" : "path",
@@ -1893,7 +1906,7 @@
                 "summary" : "Get push notification subscription by id",
                 "description" : "Retrieve a configured and active push notification subscription with the provided id.",
                 "operationId" : "get-push-notification-subscription",
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "subscription-id",
                     "in" : "path",
@@ -1928,8 +1941,8 @@
                 "summary" : "Update push notification subscription",
                 "description" : "Update an existing push notification subscription with the supplied id. The configured URL has to support https scheme.",
                 "operationId" : "put-push-notification-subscription",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "subscription-id",
                     "in" : "path",
@@ -1965,8 +1978,8 @@
                 "summary" : "Delete push notification subscription",
                 "description" : "Delete a push notification subscription with the provided id.",
                 "operationId" : "delete-push-notification-subscription",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "subscription-id",
                     "in" : "path",
@@ -1997,8 +2010,8 @@
                 "summary" : "Add transport information by transport id",
                 "description" : "Add information to an existing transport. The transport id is part of the shipment. You can retrieve the transport id through the GET shipment list request.",
                 "operationId" : "add-transport-information-by-transport-id",
-                "consumes" : [ "application/vnd.retailer.v6+json" ],
-                "produces" : [ "application/vnd.retailer.v6+json" ],
+                "consumes" : [ "application/vnd.retailer.v7+json" ],
+                "produces" : [ "application/vnd.retailer.v7+json" ],
                 "parameters" : [ {
                     "name" : "transport-id",
                     "in" : "path",
@@ -2090,12 +2103,14 @@
                 "url" : {
                     "type" : "string",
                     "example" : "http://example.com",
-                    "description" : "The url of the asset that will be used to do the actual uploading."
+                    "description" : "The URL of the asset.",
+                    "minLength" : 0,
+                    "maxLength" : 2048
                 },
                 "labels" : {
                     "type" : "array",
-                    "example" : "[ \"primary\" ]",
-                    "description" : "The labels characterizing the asset, for detailed information see the datamodel.",
+                    "example" : "[ \"FRONT\" ]",
+                    "description" : "The label(s) of the asset.",
                     "items" : {
                         "type" : "string"
                     },
@@ -2111,16 +2126,17 @@
                 "id" : {
                     "type" : "string",
                     "example" : "Width",
-                    "description" : "Identifier of the attribute from the data model.",
+                    "description" : "The identifier of the attribute for which the value has changed.",
                     "minLength" : 1,
                     "maxLength" : 100
                 },
                 "values" : {
                     "type" : "array",
-                    "description" : "A list of attribute values.",
                     "items" : {
                         "$ref" : "#/definitions/AttributeValue"
-                    }
+                    },
+                    "maxItems" : 300,
+                    "minItems" : 1
                 }
             }
         },
@@ -2274,20 +2290,6 @@
                 }
             }
         },
-        "BulkProcessStatusRequest" : {
-            "type" : "object",
-            "required" : [ "processStatusQueries" ],
-            "properties" : {
-                "processStatusQueries" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "#/definitions/ProcessStatusId"
-                    },
-                    "maxItems" : 1000,
-                    "minItems" : 1
-                }
-            }
-        },
         "BundlePrice" : {
             "type" : "object",
             "required" : [ "quantity", "unitPrice" ],
@@ -2306,6 +2308,29 @@
                     "description" : "The price per single unit including VAT in case the customer orders at least the quantity provided. When using more than 1 price, the respective prices must be in decreasing order using 2 decimal precision and dot separated.",
                     "minimum" : 1,
                     "maximum" : 9999
+                }
+            }
+        },
+        "Campaign" : {
+            "type" : "object",
+            "required" : [ "name", "startDateTime" ],
+            "properties" : {
+                "name" : {
+                    "type" : "string",
+                    "example" : "Campaign name",
+                    "description" : "The name of the campaign under which the promotion had been created."
+                },
+                "startDateTime" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2021-03-29T00:00:00.000+02:00",
+                    "description" : "The starting date and time of the campaign."
+                },
+                "endDateTime" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2021-05-10T00:00:00.000+02:00",
+                    "description" : "The ending date and time of the campaign."
                 }
             }
         },
@@ -2554,7 +2579,7 @@
                 "unknownProductTitle" : {
                     "type" : "string",
                     "example" : "Unknown Product Title",
-                    "description" : "In case the product is not known to bol.com you can use this field to identify this particular product. Note: in case the product is known to bol.com, the unknown product title will not be stored.",
+                    "description" : "In case the item is not known to bol.com you can use this field to identify this particular product. Note: in case the product is known to bol.com, the unknown product title will not be stored.",
                     "minLength" : 0,
                     "maxLength" : 500
                 },
@@ -2604,24 +2629,32 @@
                 }
             }
         },
-        "CreateProductContentRequest" : {
+        "CreateProductContentSingleRequest" : {
             "type" : "object",
-            "required" : [ "language", "productContents" ],
+            "required" : [ "attributes", "language" ],
             "properties" : {
                 "language" : {
                     "type" : "string",
                     "example" : "nl",
-                    "description" : "The language to indicate the language of the supplied content. If you are selling to the Wallonian region, you should use `fr-BE`.",
+                    "description" : "The language in which content is submitted.",
                     "enum" : [ "nl", "nl-BE", "fr", "fr-BE" ]
                 },
-                "productContents" : {
+                "attributes" : {
                     "type" : "array",
-                    "description" : "A list of supplied products and their attributes. Attributes that are required for publishing products online will be mentioned in the data model.",
+                    "description" : "A list of attributes.",
                     "items" : {
-                        "$ref" : "#/definitions/ProductContent"
+                        "$ref" : "#/definitions/Attribute"
                     },
-                    "maxItems" : 100,
+                    "maxItems" : 150,
                     "minItems" : 1
+                },
+                "assets" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/Asset"
+                    },
+                    "maxItems" : 30,
+                    "minItems" : 0
                 }
             }
         },
@@ -2659,15 +2692,15 @@
                 "labelingByBol" : {
                     "type" : "boolean",
                     "example" : false,
-                    "description" : "Indicates whether the replenishment will be labeled by bol.com or not."
+                    "description" : "Indicates whether the replenishment will be labeled by bol.com."
                 },
                 "numberOfLoadCarriers" : {
                     "type" : "integer",
                     "format" : "int32",
                     "example" : 10,
-                    "description" : "The number of parcels in this replenishment.",
+                    "description" : "The number of parcels in this replenishment. Note: if you are using the bol.com pickup service, the maximum number is 20.",
                     "minimum" : 1,
-                    "maximum" : 20
+                    "maximum" : 66
                 },
                 "pickupAppointment" : {
                     "$ref" : "#/definitions/CreatePickupAppointment"
@@ -2983,7 +3016,7 @@
                 "method" : {
                     "type" : "string",
                     "example" : "FBR",
-                    "description" : "Specifies whether this shipment has been fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB).",
+                    "description" : "The fulfilment method. Fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB).",
                     "enum" : [ "FBR", "FBB" ]
                 },
                 "deliveryCode" : {
@@ -3157,7 +3190,7 @@
                 },
                 "href" : {
                     "type" : "string",
-                    "example" : "https://api.bol.com/retailer/process-status/1234567",
+                    "example" : "https://api.bol.com/shared/process-status/1234567",
                     "description" : "The URI for the resource linked to."
                 },
                 "method" : {
@@ -3330,7 +3363,7 @@
                 "orderId" : {
                     "type" : "string",
                     "example" : "A2K8290LP8",
-                    "description" : "The order id."
+                    "description" : "The identifier of the order."
                 },
                 "pickupPoint" : {
                     "type" : "boolean",
@@ -3364,7 +3397,7 @@
                 "method" : {
                     "type" : "string",
                     "example" : "FBR",
-                    "description" : "Specifies whether this shipment has been fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB)."
+                    "description" : "The fulfilment method. Fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB)."
                 },
                 "distributionParty" : {
                     "type" : "string",
@@ -3393,7 +3426,7 @@
                 "timeFrameType" : {
                     "type" : "string",
                     "example" : "REGULAR",
-                    "description" : "The selected delivery option.",
+                    "description" : "Delivery option selected by the customer.",
                     "enum" : [ "REGULAR", "EVENING", "APPOINTMENT", "SAMEDAY", "SUNDAY" ]
                 }
             }
@@ -3834,91 +3867,28 @@
                 }
             }
         },
-        "ProcessStatusId" : {
+        "Product" : {
             "type" : "object",
+            "required" : [ "ean" ],
             "properties" : {
-                "processStatusId" : {
+                "ean" : {
                     "type" : "string",
-                    "example" : "1234567",
-                    "description" : "The process status id."
-                }
-            }
-        },
-        "ProcessStatusResponse" : {
-            "type" : "object",
-            "required" : [ "processStatuses" ],
-            "properties" : {
-                "processStatuses" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "#/definitions/ProcessStatus"
-                    }
-                }
-            }
-        },
-        "ProductContent" : {
-            "type" : "object",
-            "required" : [ "attributes", "internalReference" ],
-            "properties" : {
-                "internalReference" : {
-                    "type" : "string",
-                    "example" : "USER-REFERENCE",
-                    "description" : "A user defined unique reference to identify the products in the upload.",
-                    "minLength" : 1,
-                    "maxLength" : 30
+                    "example" : "0000007740404",
+                    "description" : "The EAN number associated with this product."
                 },
-                "attributes" : {
-                    "type" : "array",
-                    "description" : "A list of attributes.",
-                    "items" : {
-                        "$ref" : "#/definitions/Attribute"
-                    },
-                    "maxItems" : 150,
-                    "minItems" : 1
-                },
-                "assets" : {
+                "relevanceScores" : {
                     "type" : "array",
                     "items" : {
-                        "$ref" : "#/definitions/Asset"
-                    },
-                    "maxItems" : 30,
-                    "minItems" : 0
-                }
-            }
-        },
-        "ProductContentResponse" : {
-            "type" : "object",
-            "required" : [ "internalReference", "status" ],
-            "properties" : {
-                "internalReference" : {
-                    "type" : "string",
-                    "example" : "USER-REFERENCE",
-                    "description" : "A user defined unique reference to identify the products in the upload."
-                },
-                "rejectedAttributes" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "#/definitions/RejectedAttributeResponse"
+                        "$ref" : "#/definitions/RelevanceScore"
                     }
                 },
-                "status" : {
-                    "type" : "string",
-                    "example" : "VALIDATED_WITH_ATTRIBUTE_FAILURES",
-                    "description" : "The end status of the rejected attribute."
-                },
-                "errorCode" : {
-                    "type" : "integer",
-                    "format" : "int32",
-                    "example" : 1000,
-                    "description" : "The rejection error code."
-                },
-                "errorDescription" : {
-                    "type" : "string",
-                    "example" : "Example rejection message.",
-                    "description" : "The rejection error message explains why the value was rejected."
+                "maximumPrice" : {
+                    "type" : "number",
+                    "example" : 21.5,
+                    "description" : "The maximum price a product can have in order to be part of the promotion."
                 }
             },
-            "description" : "A rejected product content."
+            "description" : "A single product."
         },
         "ProductLabelsProduct" : {
             "type" : "object",
@@ -3959,6 +3929,80 @@
                 }
             }
         },
+        "Products" : {
+            "type" : "object",
+            "required" : [ "products" ],
+            "properties" : {
+                "products" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/Product"
+                    }
+                }
+            },
+            "description" : "Container for multiple products."
+        },
+        "Promotion" : {
+            "type" : "object",
+            "required" : [ "countries", "endDateTime", "promotionId", "promotionType", "startDateTime", "title" ],
+            "properties" : {
+                "promotionId" : {
+                    "type" : "string",
+                    "example" : "1234",
+                    "description" : "The identifier of the promotion."
+                },
+                "title" : {
+                    "type" : "string",
+                    "example" : "Promotion title",
+                    "description" : "The title of the promotion."
+                },
+                "startDateTime" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2021-03-29T00:00:00.000+02:00",
+                    "description" : "The starting date and time of the promotion."
+                },
+                "endDateTime" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2021-05-10T00:00:00.000+02:00",
+                    "description" : "The ending date and time of the promotion."
+                },
+                "countries" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/CountryCode"
+                    }
+                },
+                "promotionType" : {
+                    "type" : "string",
+                    "example" : "AWARENESS",
+                    "description" : "The type of the promotion.",
+                    "enum" : [ "AWARENESS", "PRICE_OFF" ]
+                },
+                "retailerSpecificPromotion" : {
+                    "type" : "boolean",
+                    "example" : false,
+                    "description" : "Indicates whether the promotion is retailer specific or open to the platform."
+                },
+                "campaign" : {
+                    "$ref" : "#/definitions/Campaign"
+                }
+            },
+            "description" : "A single promotion."
+        },
+        "Promotions" : {
+            "type" : "object",
+            "properties" : {
+                "promotions" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/ReducedPromotion"
+                    }
+                }
+            },
+            "description" : "Container for multiple promotions."
+        },
         "ReducedInvalidReplenishmentLine" : {
             "type" : "object",
             "required" : [ "type" ],
@@ -3973,12 +4017,12 @@
         },
         "ReducedOrder" : {
             "type" : "object",
-            "required" : [ "orderItems" ],
+            "required" : [ "orderId", "orderItems", "orderPlacedDateTime" ],
             "properties" : {
                 "orderId" : {
                     "type" : "string",
                     "example" : "A2K8290LP8",
-                    "description" : "The order id."
+                    "description" : "The identifier of the order."
                 },
                 "orderPlacedDateTime" : {
                     "type" : "string",
@@ -3997,6 +4041,7 @@
         },
         "ReducedOrderItem" : {
             "type" : "object",
+            "required" : [ "ean", "orderItemId", "quantity", "quantityCancelled", "quantityShipped" ],
             "properties" : {
                 "orderItemId" : {
                     "type" : "string",
@@ -4041,6 +4086,55 @@
                 }
             },
             "description" : "Container for many orders."
+        },
+        "ReducedPromotion" : {
+            "type" : "object",
+            "required" : [ "countries", "endDateTime", "promotionId", "promotionType", "startDateTime", "title" ],
+            "properties" : {
+                "promotionId" : {
+                    "type" : "string",
+                    "example" : "1234",
+                    "description" : "The identifier of the promotion."
+                },
+                "title" : {
+                    "type" : "string",
+                    "example" : "Promotion title",
+                    "description" : "The title of the promotion."
+                },
+                "startDateTime" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2021-03-29T00:00:00.000+02:00",
+                    "description" : "The starting date and time of the promotion."
+                },
+                "endDateTime" : {
+                    "type" : "string",
+                    "format" : "date-time",
+                    "example" : "2021-05-10T00:00:00.000+02:00",
+                    "description" : "The ending date and time of the promotion."
+                },
+                "countries" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/CountryCode"
+                    }
+                },
+                "promotionType" : {
+                    "type" : "string",
+                    "example" : "AWARENESS",
+                    "description" : "The type of the promotion.",
+                    "enum" : [ "AWARENESS", "PRICE_OFF" ]
+                },
+                "retailerSpecificPromotion" : {
+                    "type" : "boolean",
+                    "example" : false,
+                    "description" : "Indicates whether the promotion is retailer specific or open to the platform."
+                },
+                "campaign" : {
+                    "$ref" : "#/definitions/Campaign"
+                }
+            },
+            "description" : "A single promotion."
         },
         "ReducedReplenishment" : {
             "type" : "object",
@@ -4105,7 +4199,7 @@
                 "fulfilmentMethod" : {
                     "type" : "string",
                     "example" : "FBR",
-                    "description" : "Specifies whether this shipment has been fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB)."
+                    "description" : "The fulfilment method. Fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB)."
                 },
                 "returnItems" : {
                     "type" : "array",
@@ -4122,7 +4216,7 @@
                 "rmaId" : {
                     "type" : "string",
                     "example" : "31234567",
-                    "description" : "The RMA (Return Merchandise Authorization) id that identifies this particular return."
+                    "description" : "The RMA (Return Merchandise Authorization) identifier of the return."
                 },
                 "orderId" : {
                     "type" : "string",
@@ -4259,41 +4353,6 @@
                 }
             }
         },
-        "RejectedAttributeResponse" : {
-            "type" : "object",
-            "required" : [ "attributeId", "rejectionErrors" ],
-            "properties" : {
-                "attributeId" : {
-                    "type" : "string",
-                    "example" : "Width",
-                    "description" : "Identifier of the attribute from the data model."
-                },
-                "rejectionErrors" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "#/definitions/RejectionError"
-                    }
-                }
-            },
-            "description" : "A rejected attribute."
-        },
-        "RejectionError" : {
-            "type" : "object",
-            "required" : [ "code", "message" ],
-            "properties" : {
-                "code" : {
-                    "type" : "integer",
-                    "format" : "int32",
-                    "example" : 1000,
-                    "description" : "The rejection error code."
-                },
-                "message" : {
-                    "type" : "string",
-                    "example" : "Example rejection message.",
-                    "description" : "The rejection error message explains why the value was rejected."
-                }
-            }
-        },
         "RelatedSearchTerm" : {
             "type" : "object",
             "required" : [ "searchTerm", "total" ],
@@ -4310,6 +4369,24 @@
                     "description" : "The search term for which you requested the search volume."
                 }
             }
+        },
+        "RelevanceScore" : {
+            "type" : "object",
+            "properties" : {
+                "countryCode" : {
+                    "type" : "string",
+                    "example" : "NL",
+                    "description" : "The country for which the relevance score has been calculated against.",
+                    "enum" : [ "NL", "BE" ]
+                },
+                "relevanceScore" : {
+                    "type" : "integer",
+                    "format" : "int32",
+                    "example" : 72,
+                    "description" : "The calculated relevance score for the product."
+                }
+            },
+            "description" : "The relevance score of a product in a promotion."
         },
         "ReplenishmentLine" : {
             "type" : "object",
@@ -4484,7 +4561,7 @@
                 "unknownProductTitle" : {
                     "type" : "string",
                     "example" : "Unknown Product Title",
-                    "description" : "In case the product is not known to bol.com you can use this field to identify this particular product. Note: in case the product is known to bol.com, the unknown product title will not be stored."
+                    "description" : "In case the item is not known to bol.com you can use this field to identify this particular product. Note: in case the product is known to bol.com, the unknown product title will not be stored."
                 },
                 "pricing" : {
                     "$ref" : "#/definitions/Pricing"
@@ -4527,7 +4604,7 @@
                 "fulfilmentMethod" : {
                     "type" : "string",
                     "example" : "FBR",
-                    "description" : "Specifies whether this shipment has been fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB)."
+                    "description" : "The fulfilment method. Fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB)."
                 },
                 "returnItems" : {
                     "type" : "array",
@@ -4544,7 +4621,7 @@
                 "rmaId" : {
                     "type" : "string",
                     "example" : "31234567",
-                    "description" : "The RMA (Return Merchandise Authorization) id that identifies this particular return."
+                    "description" : "The RMA (Return Merchandise Authorization) identifier of the return."
                 },
                 "orderId" : {
                     "type" : "string",
@@ -4652,12 +4729,14 @@
                 "handlingResult" : {
                     "type" : "string",
                     "example" : "RETURN_RECEIVED",
+                    "description" : "The handling result requested by the retailer.",
                     "enum" : [ "RETURN_RECEIVED", "EXCHANGE_PRODUCT", "RETURN_DOES_NOT_MEET_CONDITIONS", "REPAIR_PRODUCT", "CUSTOMER_KEEPS_PRODUCT_PAID", "STILL_APPROVED" ]
                 },
                 "quantityReturned" : {
                     "type" : "integer",
                     "format" : "int32",
                     "example" : 1,
+                    "description" : "The quantity of items returned.",
                     "minimum" : 1,
                     "maximum" : 9999
                 }
@@ -4987,7 +5066,7 @@
                 "method" : {
                     "type" : "string",
                     "example" : "FBR",
-                    "description" : "Specifies whether this shipment has been fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB).",
+                    "description" : "The fulfilment method. Fulfilled by the retailer (FBR) or fulfilled by bol.com (FBB).",
                     "enum" : [ "FBR", "FBB" ]
                 },
                 "distributionParty" : {
@@ -5179,7 +5258,7 @@
                     "type" : "integer",
                     "format" : "int32",
                     "example" : 5,
-                    "description" : "The amount of items in stock minus handled order and minus open orders. As compared to the stock you sent us. When this reaches 0, your offer will not be for sale on the shop."
+                    "description" : "The amount of order items in stock minus handled order items and minus open order items. As compared to the stock you sent us. When this reaches 0, your offer will not be for sale on the shop."
                 },
                 "managedByRetailer" : {
                     "type" : "boolean",
@@ -5379,7 +5458,7 @@
                 "unknownProductTitle" : {
                     "type" : "string",
                     "example" : "Unknown Product Title",
-                    "description" : "In case the product is not known to bol.com you can use this field to identify this particular product. Note: in case the product is known to bol.com, the unknown product title will not be stored.",
+                    "description" : "In case the item is not known to bol.com you can use this field to identify this particular product. Note: in case the product is known to bol.com, the unknown product title will not be stored.",
                     "minLength" : 0,
                     "maxLength" : 500
                 },
@@ -5423,16 +5502,16 @@
                     "type" : "integer",
                     "format" : "int32",
                     "example" : 10,
-                    "description" : "The number of parcels in this replenishment. Note: for first mile this is only a maximum of 20 load carriers.",
+                    "description" : "The number of parcels in this replenishment. Note: if you are using the bol.com pickup service, the maximum number is 20.",
                     "minimum" : 1,
-                    "maximum" : 50
+                    "maximum" : 66
                 },
                 "loadCarriers" : {
                     "type" : "array",
                     "items" : {
                         "$ref" : "#/definitions/UpdateLoadCarrier"
                     },
-                    "maxItems" : 50,
+                    "maxItems" : 66,
                     "minItems" : 1
                 }
             }
@@ -5458,17 +5537,127 @@
                 }
             }
         },
-        "ValidationReportResponse" : {
+        "UploadReportAsset" : {
             "type" : "object",
+            "required" : [ "labels", "status", "url" ],
             "properties" : {
-                "productContents" : {
+                "url" : {
+                    "type" : "string",
+                    "example" : "http://example.com",
+                    "description" : "The URL of the asset."
+                },
+                "labels" : {
+                    "type" : "array",
+                    "example" : "[ \"FRONT\" ]",
+                    "description" : "The label(s) of the asset.",
+                    "items" : {
+                        "type" : "string"
+                    }
+                },
+                "status" : {
+                    "type" : "string",
+                    "example" : "DECLINED",
+                    "description" : "The processing state of the submitted asset.",
+                    "enum" : [ "IN_PROGRESS", "DECLINED", "PUBLISHED" ]
+                },
+                "subStatus" : {
+                    "type" : "string",
+                    "example" : "DOWNLOAD_FAILED_404",
+                    "description" : "The reason code explaining why the value was rejected.",
+                    "enum" : [ "DELETED", "DOWNLOAD_FAILED_404", "DOWNLOAD_FAILED_UNAUTHORIZED", "IMAGE_FLAGGED_AS_DUPLICATE", "IMAGE_RATE_LIMITED", "IMPORT_FAILED", "LABEL_UPDATED", "MATCH_TO_PRODUCT_FAILED", "NOT_VALID_FOR_IMPORT", "PUBLISHED", "RECEIVED", "SCORED_OTHER_IMAGE_WON", "STORED", "SUPPLIED_FLAGGED_AS_BLACKLISTED", "UNKNOWN", "UNPUBLISHED", "UNSUPPORTED_MIMETYPE", "UPLOAD_CANCELLED", "UPLOAD_DEADLINE_REACHED", "UPLOAD_FAILED" ]
+                },
+                "subStatusDescription" : {
+                    "type" : "string",
+                    "example" : "Failed to download.",
+                    "description" : "The reason explaining why the value was rejected."
+                }
+            }
+        },
+        "UploadReportAttribute" : {
+            "type" : "object",
+            "required" : [ "id", "status", "values" ],
+            "properties" : {
+                "id" : {
+                    "type" : "string",
+                    "example" : "Width",
+                    "description" : "The identifier of the attribute for which the value has changed."
+                },
+                "values" : {
                     "type" : "array",
                     "items" : {
-                        "$ref" : "#/definitions/ProductContentResponse"
+                        "$ref" : "#/definitions/UploadReportValue"
+                    }
+                },
+                "status" : {
+                    "type" : "string",
+                    "example" : "DECLINED",
+                    "description" : "The processing state of the submitted attribute.",
+                    "enum" : [ "IN_PROGRESS", "DECLINED", "PUBLISHED" ]
+                },
+                "subStatus" : {
+                    "type" : "string",
+                    "example" : "INVALID_NUMBER",
+                    "description" : "The reason code explaining why the value was rejected.",
+                    "enum" : [ "BLOCKED_BY_RATE_LIMITER", "CREATED", "DEPRECATED", "IDENTICAL_VALUE_AS_BEFORE", "MATCH_TO_PRODUCT_FAILED", "NOT_CHANGED", "NOT_RECENT", "PROCESSING_STARTED", "RECEIVED", "REJECTED", "REJECTED_BY_BRAND_AUTHORITY", "REJECTED_BY_LOGISTIC", "REJECTED_NO_DATA", "REJECTED_UNPROCESSABLE", "SELECTED", "SELECTED_BY_BRAND_AUTHORITY", "SELECTED_BY_LOGISTIC", "SELECTION_DELETED", "SELECTION_MERGED", "TIMED_OUT", "UPDATED", "UPLOADED", "UNKNOWN", "VALID_EAN", "VALIDATED", "VALIDATION_FAILED", "VALIDATION_FAILED_DISABLED_GPC_CODE", "VALIDATION_FAILED_DOES_NOT_EXIST", "VALIDATION_FAILED_INVALID_DATE", "VALIDATION_FAILED_INVALID_EAN", "VALIDATION_FAILED_INVALID_FRACTION", "VALIDATION_FAILED_INVALID_GPC_CODE", "VALIDATION_FAILED_INVALID_INTEGER", "VALIDATION_FAILED_INVALID_ISODATE", "VALIDATION_FAILED_INVALID_ISODATETIME", "VALIDATION_FAILED_INVALID_LOV_VALUE", "VALIDATION_FAILED_INVALID_MULTIPLE_VALUES", "VALIDATION_FAILED_INVALID_NO_VALUES", "VALIDATION_FAILED_INVALID_NUMBER", "VALIDATION_FAILED_INVALID_NUMERIC_TEXT", "VALIDATION_FAILED_INVALID_TEXT", "VALIDATION_FAILED_INVALID_UNIT", "VALIDATION_FAILED_INVALID_URL", "VALIDATION_FAILED_INVALID_VALUES", "VALIDATION_FAILED_NOT_ALLOWED", "VALIDATION_FAILED_UNKNOWN_BASETYPE", "WAITING_FOR_GLOBAL_ID" ]
+                },
+                "subStatusDescription" : {
+                    "type" : "string",
+                    "example" : "The provided number is not correct.",
+                    "description" : "The reason explaining why the value was rejected."
+                }
+            }
+        },
+        "UploadReportResponse" : {
+            "type" : "object",
+            "required" : [ "attributes", "language", "status", "uploadId" ],
+            "properties" : {
+                "uploadId" : {
+                    "type" : "string",
+                    "example" : "3fa90f24-5b44-417f-b212-5cd18ce64c0e",
+                    "description" : "The identifier of the upload report."
+                },
+                "language" : {
+                    "type" : "string",
+                    "example" : "nl",
+                    "description" : "The language in which content is submitted.",
+                    "enum" : [ "nl", "nl-BE", "fr", "fr-BE" ]
+                },
+                "status" : {
+                    "type" : "string",
+                    "example" : "IN_PROGRESS",
+                    "description" : "The current status of the upload report.",
+                    "enum" : [ "IN_PROGRESS", "COMPLETED" ]
+                },
+                "attributes" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/UploadReportAttribute"
+                    }
+                },
+                "assets" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "#/definitions/UploadReportAsset"
                     }
                 }
             },
-            "description" : "Validation report."
+            "description" : "Upload report."
+        },
+        "UploadReportValue" : {
+            "type" : "object",
+            "required" : [ "value" ],
+            "properties" : {
+                "value" : {
+                    "type" : "string",
+                    "example" : "14.5",
+                    "description" : "The value of the attribute."
+                },
+                "unitId" : {
+                    "type" : "string",
+                    "example" : "mm",
+                    "description" : "The unit identifier of the attribute."
+                }
+            }
         },
         "Violation" : {
             "type" : "object",
